@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.model.TodoModel;
+import org.example.model.TodoEntity;
 import org.example.model.TodoRequest;
 import org.example.repository.TodoRepository;
 import org.junit.jupiter.api.Test;
@@ -34,16 +34,16 @@ class TodoServiceTest {
 
     @Test
     void add() {
-        //todoRepository가 save를 호출해서 TodoEntity 값을 받으면
-        when(this.todoRepository.save(any(TodoModel.class)))
-                //받은 Entity값을 반환
+        //todoRepository가 save를 호출해서 TodoModel 값을 받으면
+        when(this.todoRepository.save(any(TodoEntity.class)))
+                //받은 Model값을 반환
                 .then(AdditionalAnswers.returnsFirstArg());
         //값 셋팅
         TodoRequest expected = new TodoRequest();
         expected.setTitle("Test Title");
 
         //Service에 request를 보냄(요청)
-        TodoModel actual = this.todoService.add(expected);
+        TodoEntity actual = this.todoService.add(expected);
 
         //직접 넣은 값과 실제로 반환 받은 값이 일치하는지 확인
         assertEquals(expected.getTitle(), actual.getTitle());
@@ -51,23 +51,23 @@ class TodoServiceTest {
 
     @Test
     void searchById() {
-        TodoModel entity = new TodoModel();
+        TodoEntity entity = new TodoEntity();
         entity.setId(123L);
         entity.setTitle("TITLE");
         entity.setOrder(0L);
         entity.setCompleted(false);
 
         //Optional로 리턴(entity)값을 넣어줌(findById - Optional 반환 메소드)
-        Optional<TodoModel> optional = Optional.of(entity);
+        Optional<TodoEntity> optional = Optional.of(entity);
         //findById로 id값이 주어졌을때 optional 값을 리턴할 수 있도록 설정
         given(this.todoRepository.findById(anyLong()))
                 .willReturn(optional);
 
         //직접 넣은 값(optional) 가져오기
-        TodoModel expected = optional.get();
+        TodoEntity expected = optional.get();
 
         //Service에서 searchById를 했을 때 실제 반환받은 값을 TodoEntity에 보냄
-        TodoModel actual = this.todoService.searchById(123L);
+        TodoEntity actual = this.todoService.searchById(123L);
 
         //값 비교
         assertEquals(expected.getId(), actual.getId());

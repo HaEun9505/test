@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.model.TodoModel;
+import org.example.model.TodoEntity;
 import org.example.model.TodoRequest;
 import org.example.service.TodoService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,11 +28,11 @@ class TodoControllerTest {
     @MockBean
     TodoService todoService;
 
-    private TodoModel expected;
+    private TodoEntity expected;
     @BeforeEach
     void setup() {
         //메소드가 실행되기 전 마다 초기화
-        this.expected = new TodoModel();
+        this.expected = new TodoEntity();
         this.expected.setId(123L);
         this.expected.setTitle("TEST TITLE");
         this.expected.setOrder(0L);
@@ -44,7 +44,7 @@ class TodoControllerTest {
                 .then((i) -> {
                     TodoRequest request = i.getArgument(0, TodoRequest.class);
 
-                    return new TodoModel(this.expected.getId(),
+                    return new TodoEntity(this.expected.getId(),
                                             request.getTitle(),
                                             this.expected.getOrder(),
                                             this.expected.getCompleted());

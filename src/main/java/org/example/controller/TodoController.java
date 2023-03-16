@@ -2,7 +2,7 @@ package org.example.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.model.TodoModel;
+import org.example.model.TodoEntity;
 import org.example.model.TodoRequest;
 import org.example.model.TodoResponse;
 import org.example.service.TodoService;
@@ -35,7 +35,7 @@ public class TodoController {
             request.setCompleted(false);
 
         //TodoEntity를 result 값으로 받음
-        TodoModel result = this.service.add(request);
+        TodoEntity result = this.service.add(request);
         //받은 result 값을 TodoResponse에 매핑해서 내려줌(리턴)
         return ResponseEntity.ok(new TodoResponse(result));
     }
@@ -45,13 +45,13 @@ public class TodoController {
     //경로로 받은 id값을 쓰기 위해서 파라미터(@PathVariable)로 받음
     public ResponseEntity<TodoResponse> readOne(@PathVariable Long id) {
         log.info("READ ONE");
-        TodoModel result = this.service.searchById(id);
+        TodoEntity result = this.service.searchById(id);
         return ResponseEntity.ok(new TodoResponse(result));
     }
     @GetMapping
     public ResponseEntity<List<TodoResponse>> readAll() {   //전체 조회 메소드
         log.info("READ ALL");
-        List<TodoModel> list = this.service.searchAll();
+        List<TodoEntity> list = this.service.searchAll();
         //받은 list를 TodoResponse로 매핑
         List<TodoResponse> response = list.stream().map(TodoResponse::new)
                                                     .collect(Collectors.toList());
@@ -62,7 +62,7 @@ public class TodoController {
     //
     public ResponseEntity<TodoResponse> update(@PathVariable Long id, @RequestBody TodoRequest request) {
         log.info("UPDATE");
-        TodoModel result = this.service.updateById(id, request);
+        TodoEntity result = this.service.updateById(id, request);
         return ResponseEntity.ok(new TodoResponse(result));
     }
 
